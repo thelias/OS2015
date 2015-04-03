@@ -1,4 +1,5 @@
-﻿class PCB {
+﻿/// <reference path="cpu.ts" />
+class PCB {
     PID: number;
     burstTime: number;
     ioTime: number;
@@ -26,12 +27,10 @@
     }
 
     display() {
-        alert('Pid: ' + this.PID + 'arrival time: ' + this.arrivalTime + 'burst time: ' + this.burstTime + 'priority: ' + this.priority + 'state: ' + this.state + 'io time: ' + this.ioTime);
     }
 }
 
 window.onload = () => {
     var el = document.getElementById('content');
     var testPCB = new PCB(1, 0, 100, 10, 20, true);
-    testPCB.display();
 };
