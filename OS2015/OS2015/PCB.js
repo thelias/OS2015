@@ -1,14 +1,5 @@
-﻿class PCB {
-    PID: number;
-    burstTime: number;
-    ioTime: number;
-    priority: number;
-    state: boolean;
-    arrivalTime: number;
-    completedTime: number;
-    accumulatedTime: number;
-
-    constructor(PID: number, arrivalTime: number, burstTime: number, priority: number, ioTime: number, state: boolean ) {
+var PCB = (function () {
+    function PCB(PID, arrivalTime, burstTime, priority, ioTime, state) {
         this.PID = PID;
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
@@ -16,22 +7,20 @@
         this.state = state;
         this.ioTime = ioTime;
     }
-
-    completed(time: number) {
+    PCB.prototype.completed = function (time) {
         this.completedTime = time;
-    }
-
-    calculateTime() {
+    };
+    PCB.prototype.calculateTime = function () {
         return this.accumulatedTime = this.completedTime - this.arrivalTime;
-    }
-
-    display() {
+    };
+    PCB.prototype.display = function () {
         alert('Pid: ' + this.PID + 'arrival time: ' + this.arrivalTime + 'burst time: ' + this.burstTime + 'priority: ' + this.priority + 'state: ' + this.state + 'io time: ' + this.ioTime);
-    }
-}
-
-window.onload = () => {
+    };
+    return PCB;
+})();
+window.onload = function () {
     var el = document.getElementById('content');
     var testPCB = new PCB(1, 0, 100, 10, 20, true);
     testPCB.display();
 };
+//# sourceMappingURL=PCB.js.map
