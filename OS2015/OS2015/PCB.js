@@ -18,8 +18,4 @@ var PCB = (function () {
     };
     return PCB;
 })();
-window.onload = function () {
-    var el = document.getElementById('content');
-    var testPCB = new PCB(1, 0, 100, 10, 20, true);
-};
 //# sourceMappingURL=PCB.js.map

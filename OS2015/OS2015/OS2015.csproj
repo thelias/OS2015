@@ -24,7 +24,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="CPU.ts" />
     <TypeScriptCompile Include="PCB.ts" />
-    <TypeScriptCompile Include="Queue.ts" />
+    <TypeScriptCompile Include="Simulator.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">

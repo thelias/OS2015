@@ -30,7 +30,3 @@ class PCB {
     }
 }
 
-window.onload = () => {
-    var el = document.getElementById('content');
-    var testPCB = new PCB(1, 0, 100, 10, 20, true);
-};
