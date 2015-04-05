@@ -4,3 +4,9 @@ C:\Users\ijones16\Desktop\os2015\OS2015\OS2015\bin\OS2015.pdb
 C:\Users\ijones16\Desktop\os2015\OS2015\OS2015\obj\Debug\OS2015.csprojResolveAssemblyReference.cache
 C:\Users\ijones16\Desktop\os2015\OS2015\OS2015\obj\Debug\OS2015.dll
 C:\Users\ijones16\Desktop\os2015\OS2015\OS2015\obj\Debug\OS2015.pdb
+C:\Users\enichols16\Documents\github\OS2015\OS2015\OS2015\bin\OS2015.dll.config
+C:\Users\enichols16\Documents\github\OS2015\OS2015\OS2015\bin\OS2015.dll
+C:\Users\enichols16\Documents\github\OS2015\OS2015\OS2015\bin\OS2015.pdb
+C:\Users\enichols16\Documents\github\OS2015\OS2015\OS2015\obj\Debug\OS2015.csprojResolveAssemblyReference.cache
+C:\Users\enichols16\Documents\github\OS2015\OS2015\OS2015\obj\Debug\OS2015.dll
+C:\Users\enichols16\Documents\github\OS2015\OS2015\OS2015\obj\Debug\OS2015.pdb
