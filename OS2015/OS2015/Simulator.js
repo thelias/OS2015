@@ -1,6 +1,7 @@
 /// <reference path="pcb.ts" />
 /// <reference path="cpu.ts" />
 var processes = [];
+var sortedProcesses = [];
 var time = 0;
 var completed = [];
 var cpu;
@@ -60,7 +61,6 @@ function main() {
         time++;
     }
     for (var i = 0; i < completed.length; i++) {
-        console.log(completed[i]);
     }
 }
 function fcfsGetPriority(processes) {
@@ -72,7 +72,9 @@ function fcfsGetPriority(processes) {
             }
         }
         processes[i].priority = priority;
+        sortedProcesses.splice(processes[i].priority, 0, processes[i]);
     }
+    processes = sortedProcesses;
 }
 function spnGetPriority(processes) {
     for (var i = 0; i < processes.length; i++) {
@@ -83,6 +85,9 @@ function spnGetPriority(processes) {
             }
         }
         processes[i].priority = priority;
+        sortedProcesses.splice(processes[i].priority, 0, processes[i]);
     }
+    console.log(sortedProcesses);
+    processes = sortedProcesses;
 }
 //# sourceMappingURL=Simulator.js.map

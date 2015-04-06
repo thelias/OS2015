@@ -1,6 +1,7 @@
 ﻿/// <reference path="pcb.ts" />
 /// <reference path="cpu.ts" />
 var processes = [];
+var sortedProcesses = [];
 var time = 0;
 var completed = [];
 var cpu;
@@ -28,6 +29,7 @@ function getProcesses(numProcesses: number) {
 function main() {
     getProcesses(10);
     spnGetPriority(processes);
+
     var complete = processes.length;
     while (completed.length < complete) {
         for (var k = 0; k < cpu.processors.length; k++) {
@@ -55,7 +57,7 @@ function main() {
                 if (cpu.processors[k].contextSwitch != 0 && cpu.processors[k].completed == true) {
                     cpu.processors[k].contextSwitch--;
                 }
-                else if (cpu.processors[k].completed  == true) {
+                else if (cpu.processors[k].completed == true) {
                     cpu.processors[k].availible = true;
                     cpu.processors[k].completed = false;
                     cpu.processors[k].contextSwitch = 2;
@@ -69,7 +71,7 @@ function main() {
     }
 
     for (var i = 0; i < completed.length; i++) {
-        console.log(completed[i])
+        //console.log(completed[i])
     }
 
 }
@@ -83,8 +85,10 @@ function fcfsGetPriority(processes: Array<PCB>) {
             }
         }
         processes[i].priority = priority;
+        sortedProcesses.splice(processes[i].priority, 0, processes[i]);
 
     }
+    processes = sortedProcesses;
 
 
 }
@@ -98,7 +102,11 @@ function spnGetPriority(processes: Array<PCB>) {
             }
         }
         processes[i].priority = priority;
+        sortedProcesses.splice(processes[i].priority, 0, processes[i]);
 
     }
+    console.log(sortedProcesses);
+    processes = sortedProcesses;
+
 
 }
