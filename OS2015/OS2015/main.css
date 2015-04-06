@@ -1,0 +1,8 @@
+.blk-background{
+	background-color: #505050;
+}
+
+.white-background{
+	background-color: rgba(240,240,240, .8);
+	border-radius: 20px;
+}
