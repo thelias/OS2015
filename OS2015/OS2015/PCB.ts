@@ -4,7 +4,7 @@ class PCB {
     burstTime: number;
     ioTime: number;
     priority: number;
-    state: boolean;
+    availableState: boolean; // if true then available
     arrivalTime: number;
     completedTime: number;
     accumulatedTime: number;
@@ -14,7 +14,7 @@ class PCB {
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         this.priority = priority;
-        this.state = state;
+        this.availableState = state;
         this.ioTime = ioTime;
     }
 

@@ -27,16 +27,16 @@ function getProcesses(numProcesses: number) {
 
 function main() {
     getProcesses(10);
-    fcfsGetPriority(processes);
+    spnGetPriority(processes);
     var complete = processes.length;
     while (completed.length < complete) {
         for (var k = 0; k < cpu.processors.length; k++) {
             if (cpu.processors[k].availible == true) {
                 for (var i = 0; i < processes.length; i++) {
-                    if (processes[i].arrivalTime <= time && processes[i].state == true) {
+                    if (processes[i].arrivalTime <= time && processes[i].availableState == true && cpu.processors[k].availible == true) {
                         cpu.processors[k].process = processes[i];
                         cpu.processors[k].availible = false;
-                        processes[i].state = false;
+                        processes[i].availableState = false;
                     }
                 }
             }
@@ -57,6 +57,7 @@ function main() {
                 }
                 else if (cpu.processors[k].completed  == true) {
                     cpu.processors[k].availible = true;
+                    cpu.processors[k].completed = false;
                     cpu.processors[k].contextSwitch = 2;
                 }
 

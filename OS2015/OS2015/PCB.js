@@ -5,7 +5,7 @@ var PCB = (function () {
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         this.priority = priority;
-        this.state = state;
+        this.availableState = state;
         this.ioTime = ioTime;
     }
     PCB.prototype.completed = function (time) {
