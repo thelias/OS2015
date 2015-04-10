@@ -3,16 +3,71 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>TypeScript HTML App</title>
-    <link rel="stylesheet" href="app.css" type="text/css" />
+    <title>Bad Ass Sim</title>
     <script src="PCB.js"></script>
     <script src="CPU.js"></script>
     <script src="Simulator.js"></script>
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="">
 </head>
-<body>
-    <h1>TypeScript HTML App</h1>
-
-    <div id="content"></div>
-    <button onclick="main()">FCFaS</button>
+<body class="blk-background">
+    <div class="row">
+        <div class="col-md-5 col-md-offset-4 white-background">
+            <h1>Zac, Ian, and Elias's OS simulation</h1>
+            <button onclick="main()" class="btn">FCFS Algorithm</button>
+            <button onclick="" class="btn ">SPN Algorithm</button>
+            <button onclick="" class="btn ">Small RR Algorithm</button>
+            <button onclick="" class="btn ">Large RR Algorithm</button>
+            <div id="results">
+                <div>
+                    Average Turnaround FCFS:
+                    <br>
+                    Average Turnaround SPN:
+                    <br>
+                    Average Turnaround Small RR:
+                    <br>
+                    Average Turnaround Large RR:
+                </div>
+                <hr>
+                <div>
+                    Average Wait FCFS:
+                    <br>
+                    Average Wait SPN:
+                    <br>
+                    Average Wait Small RR:
+                    <br>
+                    Average Wait Large RR:
+                </div>
+                <hr>
+                <div>
+                    Average Response FCFS:
+                    <br>
+                    Average Response SPN:
+                    <br>
+                    Average Response Small RR:
+                    <br>
+                    Average Response Large RR:
+                </div>
+                <hr>
+                <div>
+                    Average Throughput FCFS:
+                    <br>
+                    Average Throughput SPN:
+                    <br>
+                    Average Throughput Small RR:
+                    <br>
+                    Average Throughput Large RR:
+                </div>
+                <hr>
+                <div>
+                    Speedup 2 CPU's:
+                    <br>
+                    Speedup 4 CPU's:
+                    <br>
+                    Speedup 8 CPU's:
+                </div>
+            </div>
+        </div>
+     </div>
 </body>
 </html>

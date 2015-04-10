@@ -27,7 +27,7 @@ function getProcesses(numProcesses: number) {
 
 function main() {
     getProcesses(10);
-    spnGetPriority(processes);
+    fcfsGetPriority(processes);
     var complete = processes.length;
     while (completed.length < complete) {
         for (var k = 0; k < cpu.processors.length; k++) {
