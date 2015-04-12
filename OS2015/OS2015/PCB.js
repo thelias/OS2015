@@ -1,12 +1,15 @@
 /// <reference path="cpu.ts" />
 var PCB = (function () {
-    function PCB(PID, arrivalTime, burstTime, priority, ioTime, state) {
+    function PCB(PID, arrivalTime, burstTime, priority, ioTime, state, timeQuantum) {
         this.PID = PID;
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
+        this.localTime = burstTime;
         this.priority = priority;
         this.availableState = state;
         this.ioTime = ioTime;
+        this.timeQuantum = timeQuantum;
+        this.roundRobin = false;
     }
     PCB.prototype.completed = function (time) {
         this.completedTime = time;

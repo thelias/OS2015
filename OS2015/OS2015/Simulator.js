@@ -4,8 +4,9 @@ var processes = [];
 var time = 0;
 var completed = [];
 var cpu;
+var contextSwitch = 0;
 window.onload = function () {
-    cpu = new CPU(4);
+    cpu = new CPU(4, 0, 0);
 };
 function getProcesses(numProcesses) {
     for (var i = 0; i < numProcesses; i++) {
@@ -16,19 +17,19 @@ function getProcesses(numProcesses) {
         if (chance > 5) {
             ioTime = Math.floor((Math.random() * 100) + 1);
         }
-        var process = new PCB(i, arrivalTime, burstTime, 0, ioTime, true);
+        var process = new PCB(i, arrivalTime, burstTime, 0, ioTime, true, 20);
         processes.push(process);
     }
 }
 function main() {
     getProcesses(10);
-    fcfsGetPriority(processes);
+    rrGetPriority(processes);
     var complete = processes.length;
     while (completed.length < complete) {
         for (var k = 0; k < cpu.processors.length; k++) {
             if (cpu.processors[k].availible == true) {
                 for (var i = 0; i < processes.length; i++) {
-                    if (processes[i].arrivalTime <= time && processes[i].availableState == true && cpu.processors[k].availible == true) {
+                    if (processes[i].availableState == true && cpu.processors[k].availible == true) {
                         cpu.processors[k].process = processes[i];
                         cpu.processors[k].availible = false;
                         processes[i].availableState = false;
@@ -43,6 +44,9 @@ function main() {
                         cpu.processors[k].completed = true;
                     }
                     else {
+                        if (cpu.processors[k].process.roundRobin == true) {
+                            cpu.processors[k].process.timeQuantum--;
+                        }
                         cpu.processors[k].process.burstTime--;
                         cpu.processors[k].timeRunning++;
                     }
@@ -53,11 +57,12 @@ function main() {
                 else if (cpu.processors[k].completed == true) {
                     cpu.processors[k].availible = true;
                     cpu.processors[k].completed = false;
+                    time += cpu.processors[k].localTime;
                     cpu.processors[k].contextSwitch = 2;
+                    contextSwitch += cpu.processors[k].contextswitch;
                 }
             }
         }
-        time++;
     }
     for (var i = 0; i < completed.length; i++) {
         console.log(completed[i]);
@@ -83,6 +88,18 @@ function spnGetPriority(processes) {
             }
         }
         processes[i].priority = priority;
+    }
+}
+function rrGetPriority(processes) {
+    for (var i = 0; i < processes.length; i++) {
+        var priority = 0;
+        for (var j = 0; j < processes.length; j++) {
+            if (processes[i].arrivalTime > processes[j].arrivalTime) {
+                priority++;
+            }
+        }
+        processes[i].priority = priority;
+        processes[i].roundRobin = true;
     }
 }
 //# sourceMappingURL=Simulator.js.map
