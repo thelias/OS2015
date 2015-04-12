@@ -6,6 +6,7 @@
     <title>Bad Ass Sim</title>
     <script src="PCB.js"></script>
     <script src="CPU.js"></script>
+    <script src="jquery1.js"></script>
     <script src="Simulator.js"></script>
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="">
@@ -14,10 +15,10 @@
     <div class="row">
         <div class="col-md-5 col-md-offset-4 white-background">
             <h1>Zac, Ian, and Elias's OS simulation</h1>
-            <button onclick="main()" class="btn">FCFS Algorithm</button>
-            <button onclick="" class="btn ">SPN Algorithm</button>
-            <button onclick="" class="btn ">Small RR Algorithm</button>
-            <button onclick="" class="btn ">Large RR Algorithm</button>
+            <button onclick="main('fcfs')" class="btn">FCFS Algorithm</button>
+            <button onclick="main('spn')" class="btn ">SPN Algorithm</button>
+            <button onclick="main('rrsmall')" class="btn ">Small RR Algorithm</button>
+            <button onclick="main('rrbig')" class="btn ">Large RR Algorithm</button>
             <div id="results">
                 <div>
                     Average Turnaround FCFS:

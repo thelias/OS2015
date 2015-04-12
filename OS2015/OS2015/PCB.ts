@@ -1,4 +1,5 @@
-﻿/// <reference path="cpu.ts" />
+﻿
+/// <reference path="cpu.ts" />
 class PCB {
     PID: number;
     burstTime: number;
@@ -10,6 +11,7 @@ class PCB {
     arrivalTime: number;
     completedTime: number;
     accumulatedTime: number;
+    contextSwitch: number;
     roundRobin: boolean;
 
     constructor(PID: number, arrivalTime: number, burstTime: number, priority: number, ioTime: number, state: boolean, timeQuantum: number ) {
@@ -21,6 +23,7 @@ class PCB {
         this.availableState = state;
         this.ioTime = ioTime;
         this.timeQuantum = timeQuantum;
+        this.contextSwitch = 2;
         this.roundRobin = false;
     }
 
