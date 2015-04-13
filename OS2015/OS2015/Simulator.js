@@ -8,10 +8,11 @@ var completed = [];
 var cpu;
 var totalCompleted = 0;
 var totalArrival = 0;
+var totalStartTime = 0;
 var contextSwitch = 0;
 var timeQuantum = 20;
 window.onload = function () {
-    cpu = new CPU(1, 0, 0);
+    cpu = new CPU(3, 0, 0);
 };
 function getProcesses(numProcesses) {
     for (var i = 0; i < numProcesses; i++) {
@@ -29,8 +30,10 @@ function main(func) {
     completed = [];
     totalCompleted = 0;
     totalArrival = 0;
+    totalStartTime = 0;
     contextSwitch = 0;
     timeQuantum = 20;
+    simTime = 0;
     getProcesses(10);
     switch (func) {
         case "rrsmall":
@@ -48,25 +51,29 @@ function main(func) {
     }
     var complete = processes.length;
     while (completed.length < complete) {
+        simTime++;
         for (var k = 0; k < cpu.processors.length; k++) {
             if (cpu.processors[k].availible == true) {
                 for (var i = 0; i < processes.length; i++) {
-                    if (processes[i].availableState == true && cpu.processors[k].availible == true) {
-                        cpu.processors[k].process = processes[i];
-                        cpu.processors[k].availible = false;
-                        processes[i].availableState = false;
-                        processes[i].startTime = simTime;
+                    if (processes[i].arrivalTime <= simTime) {
+                        if (processes[i].availableState == true && cpu.processors[k].availible == true) {
+                            cpu.processors[k].process = processes[i];
+                            cpu.processors[k].availible = false;
+                            processes[i].availableState = false;
+                            processes[i].startTime = simTime;
+                        }
                     }
                 }
             }
-            else {
+            else if (cpu.processors[k].availible == false) {
                 if (cpu.processors[k].completed == false) {
                     if (cpu.processors[k].process.burstTime == 0) {
-                        cpu.processors[k].process.completedTime = time;
+                        cpu.processors[k].process.completedTime = cpu.processors[k].process.localTime + cpu.processors[k].process.startTime;
                         completed.push(cpu.processors[k].process);
                         cpu.processors[k].completed = true;
                         totalCompleted += cpu.processors[k].process.completedTime;
                         totalArrival += cpu.processors[k].process.arrivalTime;
+                        totalStartTime += cpu.processors[k].process.startTime;
                     }
                     else {
                         if (cpu.processors[k].process.roundRobin == true && cpu.processors[k].contextSwitch == 2) {
@@ -100,30 +107,36 @@ function main(func) {
                     contextSwitch += cpu.processors[k].contextSwitch;
                 }
             }
-            simTime++;
         }
     }
     for (var i = 0; i < completed.length; i++) {
-        console.log(completed[i].startTime);
-        console.log(completed[i].arrivalTime);
+        console.log(completed[i]);
     }
     switch (func) {
         case "rrsmall":
             var temp = $('#smallTurn').text();
             temp = $('#smallTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
             $('#smallTurn').text(temp);
+            temp = $('#smallRes').text() + Math.floor((totalStartTime - totalArrival) / completed.length);
+            $('#smallRes').text(temp);
             break;
         case "rrbig":
             var temp = $('#bigTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
             $('#bigTurn').text(temp);
+            temp = $('#largeRes').text() + Math.floor((totalStartTime - totalArrival) / completed.length);
+            $('#largeRes').text(temp);
             break;
         case "fcfs":
             var temp = $('#fcfsTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
             $('#fcfsTurn').text(temp);
+            temp = $('#fcfsRes').text() + Math.floor((totalStartTime - totalArrival) / completed.length);
+            $('#fcfsRes').text(temp);
             break;
         case "spn":
             var temp = $('#spnTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
             $('#spnTurn').text(temp);
+            temp = $('#spnRes').text() + Math.floor((totalStartTime - totalArrival) / completed.length);
+            $('#spnRes').text(temp);
             break;
     }
 }

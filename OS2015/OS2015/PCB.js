@@ -10,6 +10,7 @@ var PCB = (function () {
         this.timeQuantum = timeQuantum;
         this.contextSwitch = 2;
         this.roundRobin = false;
+        this.startTime = 0;
     }
     PCB.prototype.completed = function (time) {
         this.completedTime = time;

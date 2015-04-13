@@ -8,6 +8,7 @@ class PCB {
     priority: number;
     availableState: boolean; // if true then available
     arrivalTime: number;
+    startTime: number;
     completedTime: number;
     accumulatedTime: number;
     contextSwitch: number;
@@ -23,6 +24,7 @@ class PCB {
         this.timeQuantum = timeQuantum;
         this.contextSwitch = 2;
         this.roundRobin = false;
+        this.startTime = 0;
     }
 
     completed(time: number) {
