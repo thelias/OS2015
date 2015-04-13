@@ -78,7 +78,7 @@ function main(func) {
                         totalArrival += cpu.processors[k].process.arrivalTime;
                     }
                     else {
-                        if (cpu.processors[k].process.roundRobin == true) {
+                        if (cpu.processors[k].process.roundRobin == true && cpu.processors[k].contextSwitch == 2) {
                             cpu.processors[k].process.timeQuantum--;
                             cpu.processors[k].process.burstTime--;
                             cpu.processors[k].timeRunning++;
