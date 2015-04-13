@@ -3,6 +3,7 @@
 var processes = [];
 var ordered = [];
 var time = 0;
+var simTime = 0;
 var completed = [];
 var cpu;
 var totalCompleted = 0;
@@ -20,11 +21,7 @@ function getProcesses(numProcesses: number) {
         var arrivalTime = i * 10 + (Math.floor((Math.random() * 20) + 1));
         var burstTime = Math.floor((Math.random() * 100) + 1);
         var chance = Math.floor((Math.random() * 10) + 1);
-        var ioTime = 0;
-        if (chance > 5) {
-            ioTime = Math.floor((Math.random() * 100) + 1);
-        }
-        var process = new PCB(i, arrivalTime, burstTime, 0, ioTime, true, 0);
+        var process = new PCB(i, arrivalTime, burstTime, 0, true, 0);
         processes.push(process);
     }
 }
@@ -65,6 +62,7 @@ function main(func) {
                         cpu.processors[k].process = processes[i];
                         cpu.processors[k].availible = false;
                         processes[i].availableState = false;
+                        processes[i].startTime = simTime;
                     }
                 }
             }
@@ -78,7 +76,7 @@ function main(func) {
                         totalArrival += cpu.processors[k].process.arrivalTime;
                     }
                     else {
-                        if (cpu.processors[k].process.roundRobin == true) {
+                        if (cpu.processors[k].process.roundRobin == true && cpu.processors[k].contextSwitch == 2) {
                             cpu.processors[k].process.timeQuantum--;
                             cpu.processors[k].process.burstTime--;
                             cpu.processors[k].timeRunning++;
@@ -110,13 +108,15 @@ function main(func) {
                         contextSwitch += cpu.processors[k].contextSwitch;
                     }
             }
+            simTime++;
+            //console.log(simTime);
         }
        
-        for (var i = 0; i < completed.length; i++) {
-            // console.log(completed[i])
-        }
-
     }
+     for (var i = 0; i < completed.length; i++) {
+            console.log(completed[i].startTime)
+            console.log(completed[i].arrivalTime);
+        }
     switch (func) {
         case "rrsmall":
             var temp = $('#smallTurn').text()
