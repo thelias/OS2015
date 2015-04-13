@@ -82,9 +82,6 @@ function main(func) {
                             cpu.processors[k].process.timeQuantum--;
                             cpu.processors[k].process.burstTime--;
                             cpu.processors[k].timeRunning++;
-                            if (cpu.processors[k].process.timeQuantum == 0) {
-                                cpu.processors[k].availible = true;
-                            }
                         }
                         else if (cpu.processors[k].process.roundRobin == false) {
                             cpu.processors[k].process.burstTime--;
