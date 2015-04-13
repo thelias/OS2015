@@ -32,6 +32,15 @@ function getProcesses(numProcesses: number) {
 
 
 function main(func) {
+    processes = [];
+    ordered = [];
+    time = 0;
+    completed = [];
+    totalCompleted = 0;
+    totalArrival = 0;
+    contextSwitch = 0;
+    timeQuantum = 20;
+
     getProcesses(10);
     switch (func) {
         case "rrsmall":
@@ -42,8 +51,10 @@ function main(func) {
             break;
         case "fcfs":
             fcfsGetPriority(processes);
+            break;
         case "spn":
             spnGetPriority(processes);
+            break;
     }
     var complete = processes.length;
     while (completed.length < complete) {
@@ -103,11 +114,30 @@ function main(func) {
                     }
             }
         }
-        $('#results').text(Math.floor((totalCompleted - totalArrival) / completed.length));
+       
         for (var i = 0; i < completed.length; i++) {
             // console.log(completed[i])
         }
 
+    }
+    switch (func) {
+        case "rrsmall":
+            var temp = $('#smallTurn').text()
+            temp = $('#smallTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
+            $('#smallTurn').text(temp);
+            break;
+        case "rrbig":
+            var temp = $('#bigTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
+            $('#bigTurn').text(temp);
+            break;
+        case "fcfs":
+            var temp = $('#fcfsTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
+            $('#fcfsTurn').text(temp);
+            break;
+        case "spn":
+            var temp = $('#spnTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
+            $('#spnTurn').text(temp);
+            break;
     }
 }
 

@@ -1,12 +1,16 @@
 /// <reference path="pcb.ts" />
 /// <reference path="cpu.ts" />
 var processes = [];
+var ordered = [];
 var time = 0;
 var completed = [];
 var cpu;
+var totalCompleted = 0;
+var totalArrival = 0;
 var contextSwitch = 0;
+var timeQuantum = 20;
 window.onload = function () {
-    cpu = new CPU(4, 0, 0);
+    cpu = new CPU(1, 0, 0);
 };
 function getProcesses(numProcesses) {
     for (var i = 0; i < numProcesses; i++) {
@@ -17,13 +21,34 @@ function getProcesses(numProcesses) {
         if (chance > 5) {
             ioTime = Math.floor((Math.random() * 100) + 1);
         }
-        var process = new PCB(i, arrivalTime, burstTime, 0, ioTime, true, 20);
+        var process = new PCB(i, arrivalTime, burstTime, 0, ioTime, true, 0);
         processes.push(process);
     }
 }
-function main() {
+function main(func) {
+    processes = [];
+    ordered = [];
+    time = 0;
+    completed = [];
+    totalCompleted = 0;
+    totalArrival = 0;
+    contextSwitch = 0;
+    timeQuantum = 20;
     getProcesses(10);
-    rrGetPriority(processes);
+    switch (func) {
+        case "rrsmall":
+            rrGetPriority(processes, timeQuantum);
+            break;
+        case "rrbig":
+            rrGetPriority(processes, timeQuantum);
+            break;
+        case "fcfs":
+            fcfsGetPriority(processes);
+            break;
+        case "spn":
+            spnGetPriority(processes);
+            break;
+    }
     var complete = processes.length;
     while (completed.length < complete) {
         for (var k = 0; k < cpu.processors.length; k++) {
@@ -42,13 +67,31 @@ function main() {
                         cpu.processors[k].process.completedTime = time;
                         completed.push(cpu.processors[k].process);
                         cpu.processors[k].completed = true;
+                        totalCompleted += cpu.processors[k].process.completedTime;
+                        totalArrival += cpu.processors[k].process.arrivalTime;
                     }
                     else {
                         if (cpu.processors[k].process.roundRobin == true) {
                             cpu.processors[k].process.timeQuantum--;
+                            cpu.processors[k].process.burstTime--;
+                            cpu.processors[k].timeRunning++;
+                            if (cpu.processors[k].process.timeQuantum == 0) {
+                                cpu.processors[k].availible = true;
+                            }
                         }
-                        cpu.processors[k].process.burstTime--;
-                        cpu.processors[k].timeRunning++;
+                        else if (cpu.processors[k].process.roundRobin == false) {
+                            cpu.processors[k].process.burstTime--;
+                            cpu.processors[k].timeRunning++;
+                        }
+                    }
+                    if (cpu.processors[k].contextSwitch != 0 && cpu.processors[k].process.roundRobin == true && cpu.processors[k].process.timeQuantum == 0) {
+                        cpu.processors[k].contextSwitch--;
+                    }
+                    else if (cpu.processors[k].contextSwitch == 0 && cpu.processors[k].process.roundRobin == true && cpu.processors[k].process.timeQuantum == 0) {
+                        cpu.processors[k].available = true;
+                        cpu.processors[k].contextSwitch = 2;
+                        contextSwitch += cpu.processors[k].contextSwitch;
+                        cpu.processors[k].process.timeQuantum = timeQuantum;
                     }
                 }
                 if (cpu.processors[k].contextSwitch != 0 && cpu.processors[k].completed == true) {
@@ -57,15 +100,33 @@ function main() {
                 else if (cpu.processors[k].completed == true) {
                     cpu.processors[k].availible = true;
                     cpu.processors[k].completed = false;
-                    time += cpu.processors[k].localTime;
+                    time += cpu.processors[k].process.localTime;
                     cpu.processors[k].contextSwitch = 2;
-                    contextSwitch += cpu.processors[k].contextswitch;
+                    contextSwitch += cpu.processors[k].contextSwitch;
                 }
             }
         }
+        for (var i = 0; i < completed.length; i++) {
+        }
     }
-    for (var i = 0; i < completed.length; i++) {
-        console.log(completed[i]);
+    switch (func) {
+        case "rrsmall":
+            var temp = $('#smallTurn').text();
+            temp = $('#smallTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
+            $('#smallTurn').text(temp);
+            break;
+        case "rrbig":
+            var temp = $('#bigTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
+            $('#bigTurn').text(temp);
+            break;
+        case "fcfs":
+            var temp = $('#fcfsTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
+            $('#fcfsTurn').text(temp);
+            break;
+        case "spn":
+            var temp = $('#spnTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
+            $('#spnTurn').text(temp);
+            break;
     }
 }
 function fcfsGetPriority(processes) {
@@ -90,10 +151,11 @@ function spnGetPriority(processes) {
         processes[i].priority = priority;
     }
 }
-function rrGetPriority(processes) {
+function rrGetPriority(processes, quantum) {
     for (var i = 0; i < processes.length; i++) {
         var priority = 0;
         for (var j = 0; j < processes.length; j++) {
+            processes[i].timeQuantum = quantum;
             if (processes[i].arrivalTime > processes[j].arrivalTime) {
                 priority++;
             }
