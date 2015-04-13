@@ -12,7 +12,6 @@ var totalStartTime = 0;
 var contextSwitch = 0;
 var timeQuantum = 20;
 window.onload = function () {
-    cpu = new CPU(3, 0, 0);
 };
 function getProcesses(numProcesses) {
     for (var i = 0; i < numProcesses; i++) {
@@ -24,6 +23,12 @@ function getProcesses(numProcesses) {
     }
 }
 function main(func) {
+    for (var i = 1; i < 9; i++) {
+        cpu = new CPU(i, 0, 0);
+        pmain(func);
+    }
+}
+function pmain(func) {
     processes = [];
     ordered = [];
     time = 0;
@@ -116,49 +121,39 @@ function main(func) {
         case "rrsmall":
             var temp = $('#smallTurn').text();
             temp = $('#smallTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
-            $('#smallTurn').text(temp);
+            $('#smallTurn').text(temp + " ");
             temp = $('#smallRes').text() + Math.floor((totalStartTime - totalArrival) / completed.length);
-            $('#smallRes').text(temp);
+            $('#smallRes').text(temp + " ");
             var throughput = $('smallThrgh').text();
             throughput = $('#smallThrgh').text() + calculateThroughput();
-            $('#smallThrgh').text(throughput);
-
+            $('#smallThrgh').text(throughput + " ");
             break;
         case "rrbig":
             var temp = $('#bigTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
-            $('#bigTurn').text(temp);
-
+            $('#bigTurn').text(temp + " ");
             temp = $('#largeRes').text() + Math.floor((totalStartTime - totalArrival) / completed.length);
-            $('#largeRes').text(temp);
-
+            $('#largeRes').text(temp + " ");
             var throughput = $('largeThrgh').text();
             throughput = $('#largeThrgh').text() + calculateThroughput();
-            $('#largeThrgh').text(throughput);
-
+            $('#largeThrgh').text(throughput + " ");
             break;
         case "fcfs":
             var temp = $('#fcfsTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
-            $('#fcfsTurn').text(temp);
-
+            $('#fcfsTurn').text(temp + " ");
             temp = $('#fcfsRes').text() + Math.floor((totalStartTime - totalArrival) / completed.length);
-            $('#fcfsRes').text(temp);
-
+            $('#fcfsRes').text(temp + " ");
             var throughput = $('fcfsThrgh').text();
             throughput = $('#fcfsThrgh').text() + calculateThroughput();
-            $('#fcfsThrgh').text(throughput);
-
+            $('#fcfsThrgh').text(throughput + " ");
             break;
         case "spn":
             var temp = $('#spnTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
-            $('#spnTurn').text(temp);
-
+            $('#spnTurn').text(temp + " ");
             temp = $('#spnRes').text() + Math.floor((totalStartTime - totalArrival) / completed.length);
-            $('#spnRes').text(temp);
-
+            $('#spnRes').text(temp + " ");
             var throughput = $('spnThrgh').text();
             throughput = $('#spnThrgh').text() + calculateThroughput();
-            $('#spnThrgh').text(throughput);
-
+            $('#spnThrgh').text(throughput + " ");
             break;
     }
 }

@@ -8,6 +8,435 @@
     <script src="CPU.js"></script>
     <script src="jquery1.js"></script>
     <script src="Simulator.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script>
+
+        window.onload = function () {
+            var chart = new Chartist.Line('#turnaroundChart', {
+                labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+                series: [
+                    {
+                        name: 'FCFS',
+                        data: [289, 77, 61, 63, 61, 51, 48, 42]
+                    },
+                    {
+                        name: 'SPN',
+                        data: [294, 71, 98, 77, 66, 37, 63, 59],
+                    },
+                    {
+                        name: 'SmallRR',
+                        data: [272, 96, 60, 84, 31, 58, 60, 40],
+                    },
+                    {
+                        name: 'LargeRR',
+                        data: [356, 152, 62, 38, 57, 53, 36, 59]
+                    }
+                ]
+            }, {
+                low: 0
+            });
+           
+
+
+            // Let's put a sequence number aside so we can use it in the event callbacks
+            var seq = 0,
+              delays = 80,
+              durations = 500;
+
+            // Once the chart is fully created we reset the sequence
+            chart.on('created', function () {
+                seq = 0;
+            });
+
+            // On each drawn element by Chartist we use the Chartist.Svg API to trigger SMIL animations
+            chart.on('draw', function (data) {
+                seq++;
+
+                if (data.type === 'line') {
+                    // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
+                    data.element.animate({
+                        opacity: {
+                            // The delay when we like to start the animation
+                            begin: seq * delays + 1000,
+                            // Duration of the animation
+                            dur: durations,
+                            // The value where the animation should start
+                            from: 0,
+                            // The value where it should end
+                            to: 1
+                        }
+                    });
+                } else if (data.type === 'label' && data.axis === 'x') {
+                    data.element.animate({
+                        y: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.y + 100,
+                            to: data.y,
+                            // We can specify an easing function from Chartist.Svg.Easing
+                            easing: 'easeOutQuart'
+                        }
+                    });
+                } else if (data.type === 'label' && data.axis === 'y') {
+                    data.element.animate({
+                        x: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.x - 100,
+                            to: data.x,
+                            easing: 'easeOutQuart'
+                        }
+                    });
+                } else if (data.type === 'point') {
+                    data.element.animate({
+                        x1: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.x - 10,
+                            to: data.x,
+                            easing: 'easeOutQuart'
+                        },
+                        x2: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.x - 10,
+                            to: data.x,
+                            easing: 'easeOutQuart'
+                        },
+                        opacity: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: 0,
+                            to: 1,
+                            easing: 'easeOutQuart'
+                        }
+                    });
+                } else if (data.type === 'grid') {
+                    // Using data.axis we get x or y which we can use to construct our animation definition objects
+                    var pos1Animation = {
+                        begin: seq * delays,
+                        dur: durations,
+                        from: data[data.axis + '1'] - 30,
+                        to: data[data.axis + '1'],
+                        easing: 'easeOutQuart'
+                    };
+
+                    var pos2Animation = {
+                        begin: seq * delays,
+                        dur: durations,
+                        from: data[data.axis + '2'] - 100,
+                        to: data[data.axis + '2'],
+                        easing: 'easeOutQuart'
+                    };
+
+                    var animations = {};
+                    animations[data.axis + '1'] = pos1Animation;
+                    animations[data.axis + '2'] = pos2Animation;
+                    animations['opacity'] = {
+                        begin: seq * delays,
+                        dur: durations,
+                        from: 0,
+                        to: 1,
+                        easing: 'easeOutQuart'
+                    };
+
+                    data.element.animate(animations);
+                }
+            });
+
+            // For the sake of the example we update the chart every time it's created with a delay of 10 seconds
+            chart.on('created', function () {
+                if (window.__exampleAnimateTimeout) {
+                    clearTimeout(window.__exampleAnimateTimeout);
+                    window.__exampleAnimateTimeout = null;
+                }
+            });
+
+            var resChart = new Chartist.Line('#responseChart', {
+                labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+                series: [
+                    {
+                        name: 'FCFS',
+                        data: [238, 42, 15, 9, 1, 0, 0, 0]
+                    },
+                    {
+                        name: 'SPN',
+                        data: [244, 28, 40, 17, 10, 0, 0, 0],
+                    },
+                    {
+                        name: 'SmallRR',
+                        data: [212, 61, 14, 19, 1, 0, 0, 0],
+                    },
+                    {
+                        name: 'LargeRR',
+                        data: [300, 91, 22, 4, 2, 0, 0, 0]
+                    }
+                ]
+            }, {
+                low: 0
+            });
+
+
+
+            // Let's put a sequence number aside so we can use it in the event callbacks
+            var seq = 0,
+              delays = 80,
+              durations = 500;
+
+            // Once the chart is fully created we reset the sequence
+            resChart.on('created', function () {
+                seq = 0;
+            });
+
+            // On each drawn element by Chartist we use the Chartist.Svg API to trigger SMIL animations
+            resChart.on('draw', function (data) {
+                seq++;
+
+                if (data.type === 'line') {
+                    // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
+                    data.element.animate({
+                        opacity: {
+                            // The delay when we like to start the animation
+                            begin: seq * delays + 1000,
+                            // Duration of the animation
+                            dur: durations,
+                            // The value where the animation should start
+                            from: 0,
+                            // The value where it should end
+                            to: 1
+                        }
+                    });
+                } else if (data.type === 'label' && data.axis === 'x') {
+                    data.element.animate({
+                        y: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.y + 100,
+                            to: data.y,
+                            // We can specify an easing function from Chartist.Svg.Easing
+                            easing: 'easeOutQuart'
+                        }
+                    });
+                } else if (data.type === 'label' && data.axis === 'y') {
+                    data.element.animate({
+                        x: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.x - 100,
+                            to: data.x,
+                            easing: 'easeOutQuart'
+                        }
+                    });
+                } else if (data.type === 'point') {
+                    data.element.animate({
+                        x1: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.x - 10,
+                            to: data.x,
+                            easing: 'easeOutQuart'
+                        },
+                        x2: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.x - 10,
+                            to: data.x,
+                            easing: 'easeOutQuart'
+                        },
+                        opacity: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: 0,
+                            to: 1,
+                            easing: 'easeOutQuart'
+                        }
+                    });
+                } else if (data.type === 'grid') {
+                    // Using data.axis we get x or y which we can use to construct our animation definition objects
+                    var pos1Animation = {
+                        begin: seq * delays,
+                        dur: durations,
+                        from: data[data.axis + '1'] - 30,
+                        to: data[data.axis + '1'],
+                        easing: 'easeOutQuart'
+                    };
+
+                    var pos2Animation = {
+                        begin: seq * delays,
+                        dur: durations,
+                        from: data[data.axis + '2'] - 100,
+                        to: data[data.axis + '2'],
+                        easing: 'easeOutQuart'
+                    };
+
+                    var animations = {};
+                    animations[data.axis + '1'] = pos1Animation;
+                    animations[data.axis + '2'] = pos2Animation;
+                    animations['opacity'] = {
+                        begin: seq * delays,
+                        dur: durations,
+                        from: 0,
+                        to: 1,
+                        easing: 'easeOutQuart'
+                    };
+
+                    data.element.animate(animations);
+                }
+            });
+
+            // For the sake of the example we update the chart every time it's created with a delay of 10 seconds
+            resChart.on('created', function () {
+                if (window.__exampleAnimateTimeout) {
+                    clearTimeout(window.__exampleAnimateTimeout);
+                    window.__exampleAnimateTimeout = null;
+                }
+            });
+            var thrghChart = new Chartist.Line('#throughChart', {
+                labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+                series: [
+                    {
+                        name: 'FCFS',
+                        data: [0.022, 0.033, 0.027, 0.021, 0.020, 0.024, 0.024, 0.027]
+                    },
+                {
+                    name: 'SPN',
+                    data: [0.021, 0.029, 0.020, 0.020, 0.020, 0.034, 0.018, 0.020],
+                },
+                {
+                    name: 'SmallRR',
+                    data: [0.020, 0.030, 0.027, 0.018, 0.043, 0.020, 0.020, 0.033],
+                },
+                {
+                    name: 'LargeRR',
+                    data: [0.018, 0.019, 0.033, 0.032, 0.021, 0.023, 0.034, 0.020]
+                }
+                ]
+            }, {
+                low: 0
+            });
+
+
+
+            // Let's put a sequence number aside so we can use it in the event callbacks
+            var seq = 0,
+              delays = 80,
+              durations = 500;
+
+            // Once the chart is fully created we reset the sequence
+            thrghChart.on('created', function () {
+                seq = 0;
+            });
+
+            // On each drawn element by Chartist we use the Chartist.Svg API to trigger SMIL animations
+            thrghChart.on('draw', function (data) {
+                seq++;
+
+                if (data.type === 'line') {
+                    // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
+                    data.element.animate({
+                        opacity: {
+                            // The delay when we like to start the animation
+                            begin: seq * delays + 1000,
+                            // Duration of the animation
+                            dur: durations,
+                            // The value where the animation should start
+                            from: 0,
+                            // The value where it should end
+                            to: 1
+                        }
+                    });
+                } else if (data.type === 'label' && data.axis === 'x') {
+                    data.element.animate({
+                        y: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.y + 100,
+                            to: data.y,
+                            // We can specify an easing function from Chartist.Svg.Easing
+                            easing: 'easeOutQuart'
+                        }
+                    });
+                } else if (data.type === 'label' && data.axis === 'y') {
+                    data.element.animate({
+                        x: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.x - 100,
+                            to: data.x,
+                            easing: 'easeOutQuart'
+                        }
+                    });
+                } else if (data.type === 'point') {
+                    data.element.animate({
+                        x1: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.x - 10,
+                            to: data.x,
+                            easing: 'easeOutQuart'
+                        },
+                        x2: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: data.x - 10,
+                            to: data.x,
+                            easing: 'easeOutQuart'
+                        },
+                        opacity: {
+                            begin: seq * delays,
+                            dur: durations,
+                            from: 0,
+                            to: 1,
+                            easing: 'easeOutQuart'
+                        }
+                    });
+                } else if (data.type === 'grid') {
+                    // Using data.axis we get x or y which we can use to construct our animation definition objects
+                    var pos1Animation = {
+                        begin: seq * delays,
+                        dur: durations,
+                        from: data[data.axis + '1'] - 30,
+                        to: data[data.axis + '1'],
+                        easing: 'easeOutQuart'
+                    };
+
+                    var pos2Animation = {
+                        begin: seq * delays,
+                        dur: durations,
+                        from: data[data.axis + '2'] - 100,
+                        to: data[data.axis + '2'],
+                        easing: 'easeOutQuart'
+                    };
+
+                    var animations = {};
+                    animations[data.axis + '1'] = pos1Animation;
+                    animations[data.axis + '2'] = pos2Animation;
+                    animations['opacity'] = {
+                        begin: seq * delays,
+                        dur: durations,
+                        from: 0,
+                        to: 1,
+                        easing: 'easeOutQuart'
+                    };
+
+                    data.element.animate(animations);
+                }
+            });
+
+            // For the sake of the example we update the chart every time it's created with a delay of 10 seconds
+            thrghChart.on('created', function () {
+                if (window.__exampleAnimateTimeout) {
+                    clearTimeout(window.__exampleAnimateTimeout);
+                    window.__exampleAnimateTimeout = null;
+                }
+            });
+
+        }
+     
+        
+       
+    </script>
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="">
 </head>
@@ -29,17 +458,8 @@
                     <br>
                     <div id="bigTurn">Average Turnaround Large RR: </div>
                 </div>
-                <hr>
-                <div>
-                    <div id="fcfsWait">Average Wait FCFS:</div>
-                    <br>
-                    <div id="spnWait">Average Wait SPN:</div>
-                    <br>
-                    <div id="smallWait">Average Wait Small RR:</div>
-                    <br>
-                    <div id="largeWait">Average Wait Large RR:</div>
-                </div>
-                <hr>
+                <div id="turnaroundChart" class="ct-chart ct-perfect-fourth"></div>
+
                 <div>
                     <div id="fcfsRes">Average Response FCFS:</div>
                     <br>
@@ -49,6 +469,7 @@
                     <br>
                     <div id="largeRes">Average Response Large RR:</div>
                 </div>
+                <div id="responseChart" class="ct-chart ct-perfect-fourth"></div>
                 <hr>
                 <div>
                     <div id="fcfsThrgh">Average Throughput FCFS:</div>
@@ -59,16 +480,10 @@
                     <br>
                     <div id="largeThrgh">Average Throughput Large RR:</div>
                 </div>
-                <hr>
-                <div>
-                    <div id="speed2">Speedup 2 CPU's:</div>
-                    <br>
-                    <div id="speed4">Speedup 4 CPU's:</div>
-                    <br>
-                    <div id="speed8">Speedup 8 CPU's:</div>
-                </div>
+                <div id="throughChart" class="ct-chart ct-perfect-fourth"></div>
+                
             </div>
         </div>
-     </div>
+    </div>
 </body>
 </html>
