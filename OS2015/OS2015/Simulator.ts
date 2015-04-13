@@ -122,18 +122,30 @@ function main(func) {
             var temp = $('#smallTurn').text()
             temp = $('#smallTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
             $('#smallTurn').text(temp);
+            var throughput = $('smallThrgh').text();
+            throughput = $('#smallThrgh').text() + calculateThroughput();
+            $('#smallThrgh').text(throughput);
             break;
         case "rrbig":
             var temp = $('#bigTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
             $('#bigTurn').text(temp);
+            var throughput = $('largeThrgh').text();
+            throughput = $('#largeThrgh').text() + calculateThroughput();
+            $('#largeThrgh').text(throughput);
             break;
         case "fcfs":
             var temp = $('#fcfsTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
             $('#fcfsTurn').text(temp);
+            var throughput = $('fcfsThrgh').text();
+            throughput = $('#fcfsThrgh').text() + calculateThroughput();
+            $('#fcfsThrgh').text(throughput);
             break;
         case "spn":
             var temp = $('#spnTurn').text() + Math.floor((totalCompleted - totalArrival) / completed.length);
             $('#spnTurn').text(temp);
+            var throughput = $('spnThrgh').text();
+            throughput = $('#spnThrgh').text() + calculateThroughput();
+            $('#spnThrgh').text(throughput);
             break;
     }
 }
@@ -182,4 +194,9 @@ function rrGetPriority(processes: Array<PCB>, quantum: number) {
         processes[i].roundRobin = true;
 
     }
+}
+
+function calculateThroughput() {
+    var throughput = completed.length / time;
+    return throughput.toFixed(3);
 }

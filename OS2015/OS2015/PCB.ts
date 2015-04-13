@@ -8,6 +8,7 @@ class PCB {
     priority: number;
     availableState: boolean; // if true then available
     arrivalTime: number;
+    startTime: number;
     completedTime: number;
     accumulatedTime: number;
     contextSwitch: number;
